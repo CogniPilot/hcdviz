@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- PCB-style traces with 45-degree angles - 8-way symmetry -->
+  
+  <!-- Branch 1 - Up -->
+  <path d="M100 88 L100 50 L85 35" stroke="#00d4aa" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <path d="M100 50 L115 35" stroke="#00d4aa" stroke-width="2" stroke-linecap="square" fill="none"/>
+  <rect x="81" y="31" width="8" height="8" fill="#00d4aa"/>
+  <rect x="112" y="32" width="6" height="6" fill="#00a888"/>
+  
+  <!-- Branch 2 - Upper right (45deg) -->
+  <path d="M108 92 L135 65 L165 65" stroke="#00d4aa" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <path d="M135 65 L135 45" stroke="#00d4aa" stroke-width="2" stroke-linecap="square" fill="none"/>
+  <rect x="161" y="61" width="8" height="8" fill="#00d4aa"/>
+  <rect x="132" y="42" width="6" height="6" fill="#00a888"/>
+  
+  <!-- Branch 3 - Right -->
+  <path d="M112 100 L150 100 L165 115" stroke="#00d4aa" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <path d="M150 100 L165 85" stroke="#00d4aa" stroke-width="2" stroke-linecap="square" fill="none"/>
+  <rect x="161" y="111" width="8" height="8" fill="#00d4aa"/>
+  <rect x="162" y="82" width="6" height="6" fill="#00a888"/>
+  
+  <!-- Branch 4 - Lower right (45deg) -->
+  <path d="M108 108 L135 135 L165 135" stroke="#00d4aa" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <path d="M135 135 L135 155" stroke="#00d4aa" stroke-width="2" stroke-linecap="square" fill="none"/>
+  <rect x="161" y="131" width="8" height="8" fill="#00d4aa"/>
+  <rect x="132" y="152" width="6" height="6" fill="#00a888"/>
+  
+  <!-- Branch 5 - Down -->
+  <path d="M100 112 L100 150 L115 165" stroke="#00d4aa" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <path d="M100 150 L85 165" stroke="#00d4aa" stroke-width="2" stroke-linecap="square" fill="none"/>
+  <rect x="111" y="161" width="8" height="8" fill="#00d4aa"/>
+  <rect x="82" y="162" width="6" height="6" fill="#00a888"/>
+  
+  <!-- Branch 6 - Lower left (45deg) -->
+  <path d="M92 108 L65 135 L35 135" stroke="#00d4aa" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <path d="M65 135 L65 155" stroke="#00d4aa" stroke-width="2" stroke-linecap="square" fill="none"/>
+  <rect x="31" y="131" width="8" height="8" fill="#00d4aa"/>
+  <rect x="62" y="152" width="6" height="6" fill="#00a888"/>
+  
+  <!-- Branch 7 - Left -->
+  <path d="M88 100 L50 100 L35 85" stroke="#00d4aa" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <path d="M50 100 L35 115" stroke="#00d4aa" stroke-width="2" stroke-linecap="square" fill="none"/>
+  <rect x="31" y="81" width="8" height="8" fill="#00d4aa"/>
+  <rect x="32" y="112" width="6" height="6" fill="#00a888"/>
+  
+  <!-- Branch 8 - Upper left (45deg) -->
+  <path d="M92 92 L65 65 L35 65" stroke="#00d4aa" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <path d="M65 65 L65 45" stroke="#00d4aa" stroke-width="2" stroke-linecap="square" fill="none"/>
+  <rect x="31" y="61" width="8" height="8" fill="#00d4aa"/>
+  <rect x="62" y="42" width="6" height="6" fill="#00a888"/>
+  
+  <!-- Central node - square pad with inner circle (via style) -->
+  <rect x="88" y="88" width="24" height="24" fill="#00d4aa"/>
+  <circle cx="100" cy="100" r="6" fill="#006655"/>
+</svg>

@@ -1,0 +1,101 @@
+[package]
+name = "hcdviz"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "Hardware Configuration Descriptive Visualizer: a static, read-only HCDF viewer (rviz for HCDF) on Bevy"
+repository = "https://github.com/CogniPilot/hcdviz"
+
+# Size-first release profile: the wasm bundle ships to every browser, so trade compile time and a
+# little speed for size (thin LTO + opt-level "z" + one codegen unit), and strip the multi-MB
+# debuginfo/name payload rustc embeds by default. Pairs with data-wasm-opt="z" in index.html.
+[profile.release]
+lto = "thin"
+opt-level = "z"
+codegen-units = 1
+strip = "debuginfo"
+
+# Single crate for the scaffold (lib + native bin). As displays grow this splits into the designed
+# workspace: hcdviz-core (no egui) / hcdviz-ui (egui) / hcdviz-app / bins {native, web, shot}.
+[dependencies]
+# Granular features instead of the default 2d/3d/ui/audio meta-set: the viewer is 3D-only with an
+# egui UI, so audio, the sprite/2d stack, bevy's own UI/text, animation, gamepads (gilrs), sysinfo,
+# and post-process/anti-alias never run, so dropping them shrinks the wasm bundle. tonemapping_luts
+# (+ its ktx2/zstd_rust decoders) stays: Camera3d's default TonyMcMapface tonemapper reads that LUT.
+# Known limit: bevy_egui's default `bevy_ui` feature still pulls the bevy_ui render crates back in.
+bevy = { version = "0.19", default-features = false, features = [
+    # app core (the default_app set)
+    "async_executor",
+    "bevy_asset",
+    "bevy_log",
+    "bevy_state",
+    "reflect_auto_register",
+    # platform/windowing (default_platform minus gilrs/sysinfo/clipboard/custom_cursor/default_font)
+    "std",
+    "multi_threaded",
+    "bevy_winit",
+    "x11",
+    "wayland",
+    "webgl2",
+    # 3d rendering (the 3d set minus animation/text/hdr/anti-alias/post-process/morph/smaa_luts)
+    "bevy_camera",
+    "bevy_color",
+    "bevy_gizmos",
+    "bevy_gizmos_render",
+    "bevy_image",
+    "bevy_mesh",
+    "bevy_shader",
+    "bevy_material",
+    "bevy_window",
+    "png",
+    "jpeg",
+    "bevy_render",
+    "bevy_core_pipeline",
+    "bevy_pbr",
+    "bevy_light",
+    "bevy_gltf",
+    "bevy_mikktspace",
+    "ktx2",
+    "zstd_rust",
+    "tonemapping_luts",
+    # scene graph (runtime glTF spawns through bevy_scene)
+    "bevy_scene",
+    "bevy_world_serialization",
+    # picking (mesh backend only, no sprite/ui pickers)
+    "bevy_picking",
+    "mesh_picking",
+] }
+bevy_egui = "0.40"
+# `xsd` = the pure-Rust (uppsala: zero transitive deps, wasm-clean) schema validator behind the
+# warn-on-open check (src/doc.rs): every open validates the RAW bytes once and surfaces failures as
+# a dismissible amber warning while the doc still loads whatever parsed.
+hcdformat = { version = "1", features = ["xsd"] }
+# Runtime file-open picker for the "Open .hcdf / .hcdfz…" button (src/open.rs). On native
+# `rfd::FileDialog` is BLOCKING/modal (the OS chooser; on Linux the XDG Desktop Portal in a separate
+# process, so it does not contend with bevy/winit); on wasm `rfd::AsyncFileDialog` runs on the browser
+# microtask queue and delivers the picked bytes back into an Update system. Same crate, both targets;
+# mirrors `dendrite_build`'s platform layer.
+rfd = "0.15"
+
+# Browser (wasm) build only: enable getrandom 0.4's Web Crypto backend (pairs with the
+# `--cfg getrandom_backend="wasm_js"` rustflag in .cargo/config.toml). Native builds never pull this.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+getrandom = { version = "0.4", features = ["wasm_js"] }
+# console_error_panic_hook: route Rust panics to console.error with the real message (a wasm panic
+# otherwise surfaces only as "unreachable executed"). Wired via set_once() at the top of main().
+console_error_panic_hook = "0.1"
+# Spawn the async file-picker future on the browser microtask queue (no tokio under bevy/wasm). Native
+# uses the blocking picker, so this is pulled ONLY on wasm.
+wasm-bindgen-futures = "0.4"
+# The browser clipboard bridge (src/web_clipboard.rs): a Ctrl/Cmd+C/X/V keydown listener injects egui
+# copy/cut and reads `navigator.clipboard.readText()` for paste. wasm-bindgen for the JS closure +
+# JsCast; web-sys for the DOM/clipboard types. Versions match bevy_egui's resolved 0.2/0.3 lines (one copy).
+wasm-bindgen = "0.2"
+web-sys = { version = "0.3", features = [
+    "Window",
+    "Document",
+    "EventTarget",
+    "KeyboardEvent",
+    "Navigator",
+    "Clipboard",
+] }

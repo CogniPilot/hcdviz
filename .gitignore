@@ -1,0 +1,5 @@
+/target
+/.cargo/config.toml
+
+# Trunk wasm build output
+/dist

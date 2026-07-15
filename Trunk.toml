@@ -1,0 +1,14 @@
+# Trunk dev config for the browser build.
+#   trunk serve     -> build + watch + serve at http://<this-host>:8780
+#   trunk build     -> one-shot bundle into dist/
+#   trunk build --release  -> optimized (runs wasm-opt if installed)
+[build]
+target = "index.html"
+
+# Bind all interfaces so the dev server is reachable from other machines on the LAN
+# (e.g. http://<this-host>:8780), not just via loopback. Override for a locked-down
+# run with `trunk serve --address 127.0.0.1` or TRUNK_SERVE_ADDRESS.
+[serve]
+address = "0.0.0.0"
+port = 8780
+open = false

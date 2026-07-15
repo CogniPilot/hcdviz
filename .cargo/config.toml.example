@@ -1,0 +1,14 @@
+# Local development override: build against an in-tree hcdformat checkout instead of crates.io.
+#
+#   cp .cargo/config.toml.example .cargo/config.toml
+#
+# Adjust the path if your hcdformat checkout is elsewhere. With this file present, cargo builds the
+# local hcdformat; remove it to build purely from the crates.io `hcdformat = "1"` dependency.
+[patch.crates-io]
+hcdformat = { path = "../../git/cps_describe/hcdformat/rust/hcdformat-rs" }
+
+# Browser (wasm) build only. getrandom 0.4 (pulled via rand_core) requires an explicit backend on
+# wasm32-unknown-unknown; select the Web Crypto API one. Pairs with the `wasm_js` feature on getrandom
+# in Cargo.toml; BOTH are required, else getrandom errors at runtime in the browser. Native unaffected.
+[target.wasm32-unknown-unknown]
+rustflags = ['--cfg', 'getrandom_backend="wasm_js"']
